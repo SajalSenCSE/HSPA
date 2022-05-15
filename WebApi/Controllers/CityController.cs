@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Data;
 //using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -11,13 +12,17 @@ namespace WebApi.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        public CityController()
+        private readonly HousingDbContext _db;
+
+        public CityController(HousingDbContext db)
         {
+            _db = db;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Index(){
-           return new string[] {"Dhaka","Khulna"};
+        [HttpGet] //api/City
+        public IActionResult GetCities(){
+            var cities=_db.Cities.ToList();
+            return Ok(cities);
         }
     }
 }
