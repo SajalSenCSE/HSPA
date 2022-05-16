@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using WebApi.Data;
+using WebApi.Helpers;
+using WebApi.Interface;
 
 namespace WebApi
 {
@@ -33,6 +29,8 @@ namespace WebApi
                             (option=>option.UseSqlServer
                             (Configuration.GetConnectionString("Default")));
             services.AddControllers();
+            services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
 
             services.AddSwaggerGen(c =>
             {
