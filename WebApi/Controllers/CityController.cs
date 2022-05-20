@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,9 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CityController : ControllerBase
+    
+    [Authorize]
+    public class CityController : BaseController
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
@@ -29,9 +30,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet] //api/City
+        
         public async Task<IActionResult> GetCities()
         {
-            throw new UnauthorizedAccessException();
+            
             var cities=await _uow.CityRepository.GetCitiesAsync();
             var citiesDto=_mapper.Map<IEnumerable<CityDto>>(cities);
             return Ok(citiesDto);
@@ -65,8 +67,6 @@ namespace WebApi.Controllers
                 city.LastUpdatedOn=DateTime.Now;
 
             _mapper.Map(cityDto,city);
-
-            throw new Exception("Some Unkhown Error Occure");
 
             await _uow.SaveAsync();    
             return StatusCode(200);

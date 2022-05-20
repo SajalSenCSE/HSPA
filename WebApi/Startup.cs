@@ -1,12 +1,11 @@
-using System.Net;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebApi.Data;
 using WebApi.Extensions;
@@ -32,10 +31,26 @@ namespace WebApi
             services.AddDbContext<HousingDbContext>
                             (option=>option.UseSqlServer
                             (Configuration.GetConnectionString("Default")));
+                         
             services.AddControllers();
             services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
             services.AddControllers().AddNewtonsoftJson();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
+
+            var secretKey=Configuration.GetSection("AppSettings:Key").Value;
+
+            var Key=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(opt=>{
+                        opt.TokenValidationParameters=new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey=true,
+                            ValidateIssuer=false,
+                            ValidateAudience=false,
+                            IssuerSigningKey= Key
+                        };
+                    });
 
             services.AddSwaggerGen(c =>
             {
@@ -54,6 +69,7 @@ namespace WebApi
             app.UseCors(m=>m.AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod());
+            app.UseAuthentication();                
 
             app.UseAuthorization();
 
