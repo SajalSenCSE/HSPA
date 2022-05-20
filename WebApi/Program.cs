@@ -18,6 +18,11 @@ namespace WebApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureHostConfiguration(ConfigHost=>
+                {
+                    ConfigHost.AddEnvironmentVariables(prefix: "HSPA_");
+                }
+                )
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
