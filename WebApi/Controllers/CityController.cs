@@ -30,7 +30,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet] //api/City
-        
+        [AllowAnonymous]
         public async Task<IActionResult> GetCities()
         {
             
