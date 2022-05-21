@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Dtos;
+using WebApi.Errors;
+using WebApi.Extensions;
 using WebApi.Interface;
 using WebApi.Models;
 
@@ -27,9 +29,14 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Login(LoginDto logDto)
         {
             var user=await _uow.UserRepository.Authenticate(logDto.Username,logDto.Password);
+            ApiError apiError=new ApiError();
+
             if(user==null)
             {
-                return Unauthorized();
+                apiError.ErrorCode=Unauthorized().StatusCode;
+                apiError.Messahe="User Id and Password invalid";
+                apiError.ErrorDetails="hi sajal  this is error details";
+                return Unauthorized(apiError);
             } 
             
             var loginRes=new LoginResDto();
@@ -43,8 +50,21 @@ namespace WebApi.Controllers
         [HttpPost("register")] ///...api/account/register
         public async Task<IActionResult> RegisterUser(LoginDto dto)
         {
+            ApiError apiError=new ApiError();
+            if(dto.Username.IsEmpty() || dto.Password.IsEmpty())
+            {
+                apiError.ErrorCode=BadRequest().StatusCode;
+                apiError.Messahe="User name and Password can not be Empty";
+                return BadRequest(apiError.Messahe);
+            }
+
             if(await _uow.UserRepository.UserAlreadyExists(dto.Username))
-                return BadRequest("User Already");
+            {
+                apiError.ErrorCode=BadRequest().StatusCode;
+                apiError.Messahe="User Already";
+                return BadRequest(apiError.Messahe);
+            }
+               
             _uow.UserRepository.Register(dto.Username,dto.Password);
             await _uow.SaveAsync();
             return StatusCode(201);    
