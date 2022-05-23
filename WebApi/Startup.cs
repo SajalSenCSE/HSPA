@@ -11,6 +11,7 @@ using WebApi.Data;
 using WebApi.Extensions;
 using WebApi.Helpers;
 using WebApi.Interface;
+using WebApi.Services;
 
 namespace WebApi
 {
@@ -36,6 +37,7 @@ namespace WebApi
             services.AddAutoMapper(typeof(AutomapperProfile).Assembly);
             services.AddControllers().AddNewtonsoftJson();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddScoped<IPhotoService,PhotoService>();
 
             var secretKey=Configuration.GetSection("AppSettings:Key").Value;
 

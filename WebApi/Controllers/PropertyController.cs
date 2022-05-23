@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dtos;
 using WebApi.Interface;
@@ -13,11 +14,13 @@ namespace WebApi.Controllers
     {
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly IPhotoService _photoService;
 
-        public PropertyController(IUnitOfWork uow,IMapper mapper)
+        public PropertyController(IUnitOfWork uow,IMapper mapper,IPhotoService photoService)
         {
             _uow = uow;
             _mapper = mapper;
+            _photoService = photoService;
         }
         
         [HttpGet("list/{sellRent}")] ///...api/property/type
@@ -53,6 +56,16 @@ namespace WebApi.Controllers
             _uow.PropertyRepository.AddProperty(property);    
             await _uow.SaveAsync();
             return StatusCode(201);
+        }
+
+
+        [HttpPost("add/photo/{id}")] //...add/photo/1
+        public async Task<IActionResult> AddPropertyPhoto(IFormFile file,int id)
+        {
+            var resultPhoto=await _photoService.UploadPhotoAsync(file);
+            if(resultPhoto.Error != null)
+                return BadRequest(resultPhoto.Error.Message);
+            return Ok(201);    
         }
     }
 }
