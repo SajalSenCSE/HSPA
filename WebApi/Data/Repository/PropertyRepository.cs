@@ -17,7 +17,7 @@ namespace WebApi.Data.Repository
 
         public void AddProperty(Property property)
         {
-            throw new System.NotImplementedException();
+             _db.Properties.Add(property);
         }
 
         public void DeleteProperty(Property property)
@@ -34,6 +34,17 @@ namespace WebApi.Data.Repository
                         .Include(p=>p.City)
                         .ToListAsync();
            return properties;
+        }
+
+        public async Task<Property> GetPropertyDetailAsync(int id)
+        {
+            var property= await _db.Properties
+                        .Where(x=>x.Id == id)
+                        .Include(p=>p.PropertyType)
+                        .Include(p=>p.FurnishingType)
+                        .Include(p=>p.City)
+                        .FirstAsync();
+           return property;
         }
     }
 }
