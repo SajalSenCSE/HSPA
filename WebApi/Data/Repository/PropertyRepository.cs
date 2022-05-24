@@ -30,6 +30,7 @@ namespace WebApi.Data.Repository
            var properties= await _db.Properties
                         .Where(x=>x.SellRent == sellRent)
                         .Include(p=>p.PropertyType)
+                        .Include(p=>p.Photos)
                         .Include(p=>p.FurnishingType)
                         .Include(p=>p.City)
                         .ToListAsync();
@@ -42,8 +43,18 @@ namespace WebApi.Data.Repository
                         .Where(x=>x.Id == id)
                         .Include(p=>p.PropertyType)
                         .Include(p=>p.FurnishingType)
+                        .Include(p=>p.Photos)
                         .Include(p=>p.City)
                         .FirstAsync();
+           return property;
+        }
+
+        public async Task<Property> GetPropertyByIdAsync(int id)
+        {
+            var property= await _db.Properties
+                        .Include(p=>p.Photos)
+                        .Where(x=>x.Id == id)
+                        .FirstOrDefaultAsync();
            return property;
         }
     }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sajal\\Desktop\\HSPA\\webapi\\WebApi.csproj": {}
+    "C:\\Users\\sajal\\Desktop\\HSPA\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sajal\\Desktop\\HSPA\\webapi\\WebApi.csproj": {
+    "C:\\Users\\sajal\\Desktop\\HSPA\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sajal\\Desktop\\HSPA\\webapi\\WebApi.csproj",
+        "projectUniqueName": "C:\\Users\\sajal\\Desktop\\HSPA\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "C:\\Users\\sajal\\Desktop\\HSPA\\webapi\\WebApi.csproj",
+        "projectPath": "C:\\Users\\sajal\\Desktop\\HSPA\\WebApi\\WebApi.csproj",
         "packagesPath": "C:\\Users\\sajal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sajal\\Desktop\\HSPA\\webapi\\obj\\",
+        "outputPath": "C:\\Users\\sajal\\Desktop\\HSPA\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\sajal\\AppData\\Roaming\\NuGet\\NuGet.Config",
