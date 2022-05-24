@@ -110,5 +110,41 @@ namespace WebApi.Controllers
                 return Ok(201);
             return BadRequest("Some Unkhown Error happend");       
         }
+
+
+        [HttpDelete("delete-photo/{id}/{photoPublicId}")] 
+        [Authorize]
+
+        public async Task<IActionResult> DeletePhoto(int id, string photoPublicId )
+        {
+            var userId=GetUserId();
+            var property=await _uow.PropertyRepository.GetPropertyByIdAsync(id);
+            if(property==null)
+            {
+                return BadRequest("No property exist ");
+            }
+            if(property.PostedBy!=userId)
+                return BadRequest("You are not authorized to delete the photo");
+
+
+            var photo=property.Photos.FirstOrDefault(p=>p.PublicId==photoPublicId);
+            if(photo==null)
+                return BadRequest("phot not exist");   
+
+            if(photo.IsPrimary)
+                return BadRequest("You Cannot delete the primary photo");
+
+            var result=await _photoService.DeletePhotoAsync(photo.PublicId);    //delete photo cloud
+            if(result.Error != null)
+                return BadRequest(result.Error.Message);
+
+            property.Photos.Remove(photo);   ///photo is deleted from DB
+
+            if(await _uow.SaveAsync())      
+                return Ok();
+
+            return BadRequest("Some Unkhown error occurce to deleting the photo");       
+        }
+
     }
 }
