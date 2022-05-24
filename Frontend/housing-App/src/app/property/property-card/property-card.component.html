@@ -1,0 +1,37 @@
+
+    <div class="card">
+      <div class="card-Img-warap">
+        <img *ngIf="Property.photo" src="{{Property.photo}}" class="card-img-top " alt="defaulthouse">
+        <img *ngIf="!Property.photo" src="assets/House/house_default.png" class="card-img-top " alt="defaulthouse">
+        <ul *ngIf="! hidenIcon" class="list-item text-center member-icon animation">
+          <li class="list-inline-item" >
+            <button routerLink="/property-detail/{{Property.id}}" class="btn  btn-primary">
+            <i class="far fa-edit"></i></button>
+          </li>
+          <li class="list-inline-item" >
+            <button class="btn  btn-primary"><i class="far fa-address-book"></i></button>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body p-2">
+        <h1 class="mb-2">{{Property.bhk}} BHK {{Property.propertyType}}</h1>
+        in {{Property.name}}
+        <span *ngIf="Property.name">,</span>
+        {{Property.city}}
+
+        <h6 class="mt-2">{{Property.furnishingType}}
+          <span *ngIf=" Property.furnishingType !== 'Unfurnished'"> Furnished </span>
+          <span *ngIf="Property.readyToMove"> | Ready to Move </span>
+          <span *ngIf="!Property.readyToMove"> |Posession : {{Property.estPossessionOn | date}} </span>
+         </h6>
+
+          <hr class="mt-0 mb-2">
+          <h6 class="mb-0">Price: <span class="form-highlight">{{Property.price}} BDT.</span>|
+          Area: <span class="form-highlight">{{Property.builtArea}} sq Ft</span></h6>
+
+      </div>
+    </div>
+
+
+
+
